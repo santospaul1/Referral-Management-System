@@ -10,6 +10,9 @@ urlpatterns = [
     path('view_patients/', view_patients, name='view_patients'),
     path('create_hospital/', create_hospital, name='create_hospital'),
     path('view_hospitals/', view_hospitals, name='view_hospitals'),
+    path('create_disease/', create_disease, name='create_disease'),
+    path('view_diseases/', view_diseases, name='view_diseases'),
+
 
 
 

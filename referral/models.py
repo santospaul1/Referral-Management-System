@@ -8,6 +8,13 @@ GENDER_CHOICES = (
     ('Female', 'Female'),
     ('Other', 'Other'),
 )
+
+class Disease(models.Model):
+    name = models.CharField(max_length=50, default=None)
+    description = models.TextField(max_length=100, null=True)
+
+    def __str__(self):
+        return self.name
 class Hospital(models.Model):
     user = models.OneToOneField(User, default=None, on_delete=models.CASCADE)
     email = models.EmailField(unique=True, default=None)
@@ -16,6 +23,7 @@ class Hospital(models.Model):
     location = models.CharField(max_length=50, default=None)
     level = models.CharField(max_length=10, null=True)
     branches = models.CharField(max_length=100, null=True)
+    diseases = models.ForeignKey(Disease, null=True, on_delete=models.CASCADE)
     capacity = models.IntegerField(default=0)
 
     # Add more fields as needed
@@ -62,9 +70,3 @@ class Referral(models.Model):
     def __str__(self):
         return f"Referral for {self.patient} from {self.referring_hospital} to {self.referred_to_hospital}"
 
-class Disease(models.Model):
-    name = models.CharField(max_length=50, default=None)
-    description = models.TextField(max_length=100, null=True)
-
-    def __str__(self):
-        return self.name
