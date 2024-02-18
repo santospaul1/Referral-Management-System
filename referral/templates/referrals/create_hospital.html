@@ -10,30 +10,7 @@
     <h1>Create Hospital</h1>
     <form method="post">
         {% csrf_token %}
-        <label for="name">Hospital Name:</label><br>
-        <input type="text" id="name" name="name" required><br>
-
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required><br>
-
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required><br>
-
-        <label for="location">Location:</label><br>
-        <input type="text" id="location" name="location"><br>
-
-        <label for="level">Level:</label><br>
-        <input type="text" id="level" name="level"><br>
-
-        <label for="diseases">Diseases:</label><br>
-        <input type="text" id="diseases" name="diseases"><br>
-
-
-        <label for="branches">Branches:</label><br>
-        <input type="text" id="branches" name="branches"><br>
-
-        <label for="capacity">Capacity:</label><br>
-        <input type="number" id="capacity" name="capacity" required><br>
+        {{ form.as_p }}
 
         <button type="submit">Create Hospital</button>
     </form>

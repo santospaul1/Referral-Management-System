@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.shortcuts import render
 
@@ -6,7 +7,7 @@ from django.shortcuts import render
 
 from django.shortcuts import render, redirect
 from .models import Referral, Patient, Hospital, Disease
-from .forms import ReferralForm, PatientForm, DiseaseForm
+from .forms import ReferralForm, PatientForm, DiseaseForm, HospitalForm
 
 
 def referral_list(request):
@@ -40,28 +41,18 @@ def view_patients(request):
 
 def create_hospital(request):
     if request.method == 'POST':
-        # Extract form data
-        email = request.POST.get('email')
-        username = email  # Assuming email as username
-        password = request.POST.get('password')
-        name = request.POST.get('name')
-        location = request.POST.get('location')
-        level = request.POST.get('level')
-        branches = request.POST.get('branches')
-        capacity = request.POST.get('capacity')
-        diseases = request.POST.get('diseases')
+        form = HospitalForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            # Log in the newly created user
+            login(request, user)
+            form.save_m2m()  # Save many-to-many relationships after saving the user
+            return redirect('referral:view_hospitals')
+    else:
+        form = HospitalForm()
 
-        # Create user instance
-        user = User.objects.create_user(username=username, email=email, password=password, diseases=diseases)
-
-        # Create hospital instance
-        hospital = Hospital.objects.create(user=user, email=email, name=name, location=location, level=level, branches=branches, capacity=capacity)
-
-        # Redirect to a success page or any other view
-        return redirect('referral:view_hospitals')  # Change 'success_url' to your desired URL name
-
-    # If the request method is GET, render the form
-    return render(request, 'referrals/create_hospital.html')
+    return render(request, 'referrals/create_hospital.html', {'form': form})
 def view_hospitals(request):
     hospitals = Hospital.objects.all()
     return render(request, 'referrals/view_hospitals.html', {'hospitals': hospitals})
